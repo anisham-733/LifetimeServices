@@ -26,6 +26,18 @@ namespace LifetimeServices
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddTransient<IOperationTransient, Operations>();
+            services.AddScoped<IOperationScoped, Operations>();
+            services.AddSingleton<IOperationSingleton, Operations>();
+            //specific func to overload-the instance returns Guid.empty
+            services.AddSingleton<IOperationSingletonInstance, Operations>(a=>new Operations(Guid.Empty));
+
+            //add transient for new service every time
+            services.AddTransient<DependencyService1, DependencyService1>();
+            services.AddTransient<DependencyService2, DependencyService2>();
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
