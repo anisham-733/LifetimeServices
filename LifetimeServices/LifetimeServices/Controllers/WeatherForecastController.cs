@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace LifetimeServices.Controllers
 {
@@ -20,19 +19,28 @@ namespace LifetimeServices.Controllers
         private readonly DependencyService1 dependencyService1;
         private readonly DependencyService2 dependencyService2;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, DependencyService1 dependencyService1, DependencyService2 dependencyService2)
+        private readonly IEnumerable<IOperationSingletonInstance> operationSingletonInstances;
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, DependencyService1 dependencyService1, DependencyService2 dependencyService2,IEnumerable<IOperationSingletonInstance> operationSingletonInstances)
         {
             _logger = logger;
             this.dependencyService1 = dependencyService1;
             this.dependencyService2 = dependencyService2;
+            this.operationSingletonInstances = operationSingletonInstances;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            //Enumerable of the instances for that particular type
+            foreach(var instance in operationSingletonInstances)
+            {
+                Console.WriteLine(instance.OperationId);
+
+            }
             dependencyService1.Write();
             dependencyService2.Write();
-            return Enumerable.Empty<WeatherForecast>(); 
+            return Enumerable.Empty<WeatherForecast>();
         }
     }
 }

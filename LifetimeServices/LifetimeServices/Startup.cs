@@ -31,6 +31,7 @@ namespace LifetimeServices
             services.AddSingleton<IOperationSingleton, Operations>();
             //specific func to overload-the instance returns Guid.empty
             services.AddSingleton<IOperationSingletonInstance, Operations>(a=>new Operations(Guid.Empty));
+            services.AddSingleton<IOperationSingletonInstance, Operations>(a => new Operations());
 
             //add transient for new service every time
             services.AddTransient<DependencyService1, DependencyService1>();
